@@ -1,5 +1,7 @@
 package io.zipcoder;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author tariq
@@ -15,7 +17,19 @@ public class StringsAndThings {
      *           countYZ("day fyyyz"); // Should return 2
      */
     public Integer countYZ(String input){
-        return null;
+        String lowerCaseString = input.toLowerCase();
+        String[] arrayOfWords = lowerCaseString.split("\\W+");
+        Integer countEndInYZ = 0;
+
+        for (String s : arrayOfWords){
+            if (s.charAt(s.length()-1) == 'y'){
+                countEndInYZ++;
+            } else if (s.charAt(s.length()-1) == 'z') {
+                countEndInYZ++;
+            }
+        }
+
+        return countEndInYZ;
     }
 
     /**
@@ -28,7 +42,7 @@ public class StringsAndThings {
      *           removeString("Hello there", "x") // Should return "Hello there"
      */
     public String removeString(String base, String remove){
-        return null;
+        return base.replaceAll(remove, "");
     }
 
     /**
@@ -40,8 +54,31 @@ public class StringsAndThings {
      *           containsEqualNumberOfIsAndNot("noisxxnotyynotxisi") // Should return true
      */
     public Boolean containsEqualNumberOfIsAndNot(String input){
-        return null;
+        int index = 0;
+        int countOfNot = 0;
+        int countOfIs = 0;
+
+        while (index != -1){
+            index = input.indexOf("is", index);
+            if (index != -1){
+                countOfIs++;
+                index = index + 2;;
+            }
+        }
+
+        index = 0;
+
+        while (index != -1){
+            index = input.indexOf("not", index);
+            if (index != -1){
+                countOfNot++;
+                index = index + 3;
+            }
+        }
+
+        return countOfIs == countOfNot;
     }
+
 
     /**
      * We'll say that a lowercase 'g' in a string is "happy" if there is another 'g' immediately to its left or right.
@@ -51,7 +88,9 @@ public class StringsAndThings {
      *           gHappy("xxggyygxx") // Should return  false
      */
     public Boolean gIsHappy(String input){
-        return null;
+        Pattern pattern = Pattern.compile("(?<!g)g(?!g)");
+        Matcher matcher = pattern.matcher(input);
+        return !matcher.find();
     }
 
 
@@ -63,6 +102,18 @@ public class StringsAndThings {
      *            countTriple("a") // Should return 0
      */
     public Integer countTriple(String input){
-        return null;
+        int startIndex = 0;
+        int tripleCount = 0;
+        Pattern triplePattern = Pattern.compile("(\\w)\\1{2}"); // () denotes a group, '\w' refers to any word character, '\n' matches whatever was in the nth group, {n} says find the preceding term repeated n times
+
+
+        Matcher matcher = triplePattern.matcher(input);
+
+        while(matcher.find(startIndex)) {
+            tripleCount++;
+            startIndex = matcher.start() + 1;
+        }
+
+        return tripleCount;
     }
 }
